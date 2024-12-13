@@ -9,7 +9,7 @@ const passport =require('passport');
 
 const app = express(); 
 app.set('view engine', 'pug');   // Set the view engine to Pug
-app.set('views', './views/pug'); 
+app.set('views'); 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
@@ -24,6 +24,7 @@ myDB(async client =>{
   const myDataBase = await client.db('database').collection('users');
 
   // Be sure to change the title
+  console.log("successful connection");
   app.route('/').get((req, res) => {
     // Change the response to render the Pug template
     res.render('index', {
@@ -36,6 +37,7 @@ passport.serializeUser((user, done) => {
 });
 
 }).catch(e => {
+  console.log("unsuccessful connection");
   app.route('/').get((req, res) => {
     res.render('pug', { title: e, message: 'Unable to connect to database' });
   });
@@ -53,12 +55,12 @@ app.use('/public', express.static(process.cwd() + '/public'));
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));  
 
-app.route('/').get((req, res) => { 
-  res.render('index',
-     { title: 'Hello',
-       message: 'Please log in' 
-      });  
-});  
+// app.route('/').get((req, res) => { 
+//   res.render('index',
+//      { title: 'Hello',
+//        message: 'Please log in' 
+//       });  
+// });  
 
 const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => { 

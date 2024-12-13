@@ -17,6 +17,16 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.serializeUser((user, done) => {
+  done(null, user._id);
+});
+
+passport.deserializeUser((id, done) => {
+  myDB.findOne({ _id: new ObjectID(id) }, (err, doc) => {
+    done(null, null);
+  });
+});
+
 app.set('view engine', 'pug');   // Set the view engine to Pug
 app.set('views', './views/pug');
 fccTesting(app);  // For FCC testing purposes

@@ -7,7 +7,9 @@ const fccTesting = require('./freeCodeCamp/fcctesting.js');
 const session = require('express-session');
 const passport =require('passport');
 
-const app = express();  
+const app = express(); 
+app.set('view engine', 'pug');   // Set the view engine to Pug
+app.set('views', './views/pug'); 
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: true,
@@ -18,18 +20,33 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+myDB(async client =>{
+  const myDataBase = await client.db('database').collection('users');
+
+  // Be sure to change the title
+  app.route('/').get((req, res) => {
+    // Change the response to render the Pug template
+    res.render('index', {
+      title: 'Connected to Database',
+      message: 'Please login'
+    });
+  });
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
+}).catch(e => {
+  app.route('/').get((req, res) => {
+    res.render('pug', { title: e, message: 'Unable to connect to database' });
+  });
+});
 passport.deserializeUser((id, done) => {
   myDB.findOne({ _id: new ObjectID(id) }, (err, doc) => {
     done(null, null);
   });
 });
 
-app.set('view engine', 'pug');   // Set the view engine to Pug
-app.set('views', './views/pug');
+
 fccTesting(app);  // For FCC testing purposes
 
 app.use('/public', express.static(process.cwd() + '/public')); 

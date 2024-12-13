@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.route('/').get((req, res) => {
-
+console.log('3')
 });
 
 const PORT = process.env.PORT || 3000;

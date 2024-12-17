@@ -27,10 +27,11 @@ myDB(async client =>{
   console.log("successful connection");
   app.route('/').get((req, res) => {
     // Change the response to render the Pug template
-    res.render('index', {
-      title: 'Connected to Database',
-      message: 'Please login'
-    });
+    // res.render('index', {
+    //   title: 'Connected to Database',
+    //   message: 'Please login'
+    // });
+    res.render('pug', { title: 'Connected to Database', message: 'Please login' });
   });
 passport.serializeUser((user, done) => {
   done(null, user._id);

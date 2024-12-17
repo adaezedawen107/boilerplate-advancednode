@@ -45,7 +45,15 @@ passport.serializeUser((user, done) => {
 });
 passport.deserializeUser((id, done) => {
   myDB.findOne({ _id: new ObjectID(id) }, (err, doc) => {
-    done(doc);
+    if (err) {
+      console.error("Error during deserialization:", err);
+      return done(err, null); // Pass error
+    }
+    if (!doc) {
+      console.warn("No user found with the given ID");
+      return done(null, null); // Pass null for user if not found
+    }
+    return done(null, doc); // Pass the found user
   });
 });
 

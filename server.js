@@ -57,10 +57,9 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.route("/login").post(
-  passport.authenticate('local', { failureRedirect: '/' }), // Options go inside here
+app.route("/login").post(passport.authenticate('local', { failureRedirect: '/' }), // Options go inside here
   (req, res) => {
-    res.render("profile"); // Removed leading "/"
+    res.render("/profile"); // Removed leading "/"
   }
 );
 

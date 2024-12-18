@@ -58,9 +58,9 @@ passport.deserializeUser((id, done) => {
 });
 
 app.route('/login').post(
-  passport.authenticate('local', { successRedirect: '/profile', failureRedirect: '/'}),
+  passport.authenticate('local', { successRedirect: '/', failureRedirect: '/'}),
   (req, res) => {
-    res.redirect('/profile');
+    res.redirect('/');
   }
 );
 

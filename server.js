@@ -62,13 +62,12 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.route('/login').post(
-  passport.authenticate('local', { failureRedirect: '/' }), // On failure, redirect to "/"
+app.route("/login").post(
+  passport.authenticate('local', { failureRedirect: '/' }), // Options go inside here
   (req, res) => {
-    res.redirect('/profile'); // Redirect to /profile on successful login
+    res.render("profile"); // Removed leading "/"
   }
 );
-
 
 
 passport.use(new LocalStrategy((username, password, done) => {

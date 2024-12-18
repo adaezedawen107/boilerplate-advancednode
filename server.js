@@ -23,7 +23,7 @@ app.use(passport.session());
 
 myDB(async client =>{
   const myDataBase = await client.db('database').collection('users');
-
+ 
   // Be sure to change the title
   console.log("successful DB connection");
   app.route('/').get((req, res) => {
@@ -32,8 +32,8 @@ myDB(async client =>{
     //   title: 'Connected to Database',
     //   message: 'Please login'
     // });
-    res.render('pug', { title: 
-      'Connected to Database',
+    res.render('pug', {
+       title: 'Connected to Database',
        message: 'Please login',
        showLogin: true
        });
@@ -42,12 +42,7 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 
-}).catch(e => {
-  console.log("unsuccessful DB connection");
-  app.route('/').get((req, res) => {
-    res.render('pug', { title: e, message: 'Unable to connect to database' });
-  });
-});
+
 passport.deserializeUser((id, done) => {
   myDB.findOne({ _id: new ObjectID(id) }, (err, doc) => {
     if (err) {
@@ -69,7 +64,6 @@ app.route("/login").post(
   }
 );
 
-
 passport.use(new LocalStrategy((username, password, done) => {
   myDataBase.findOne({ username: username }, (err, user) => {
     console.log(`User ${username} attempted to log in.`);
@@ -79,6 +73,13 @@ passport.use(new LocalStrategy((username, password, done) => {
     return done(null, user);
   });
 }));
+
+}).catch(e => {
+  console.log("unsuccessful DB connection");
+  app.route('/').get((req, res) => {
+    res.render('pug', { title: e, message: 'Unable to connect to database' });
+  });
+});
 
 fccTesting(app);  // For FCC testing purposes
 
